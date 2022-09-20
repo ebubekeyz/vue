@@ -1,0 +1,132 @@
+<!DOCTYPE html5>
+<html lang="en">
+    <head>
+        <title>Practice</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--Tailwind css-->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+
+        <!--Alpine Js-->
+        <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
+            
+
+        <!--Vue Js-->
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    </head>
+    <body class="font-serif flex flex-col justify-center items-center">
+        <div class="max-w-4xl">
+
+            <div id="app">
+                <p class="text-4xl text-center text-gray-600">
+                    {{ heading }}
+                </p>
+
+
+                    <!--Component-->
+                <p>
+                    <login-form />
+                </p>
+               
+                <p>
+                    <toggler />
+                </p>
+
+
+            </div>
+
+
+
+            <script>
+                let app = Vue.createApp({
+                    data: function(){
+                        return {
+                            heading: 'Just Practicing'
+                        }
+                    }
+                })
+
+                app.component('login-form', {
+                    template: `
+                    <form @submit.prevent="handle" class="mt-4 bg-black/20 rounded-lg py-8 px-8">
+                    <p class="sentense-case text-2xl font-bold text-center text-gray-700"> {{ title }}</p>
+                    <custom-input :label="emailLabel" v-model="email" />
+                    <custom-input :label="passwordLabel" v-model="password"/>
+                    <button class="mt-2 py-2 text-sm w-full rounded-full text-gray-200 bg-blue-600 shadow hover:bg-blue-800 hover:text-gray-100">Submit</button>
+      
+         
+                    </form>
+                    `,
+                    components: ['custom-input'],
+                    data(){
+                        return {
+                            title: 'Login Form',
+                            email:'',
+                            password: '',
+                            emailLabel: 'Email',
+                            passwordLabel: 'Password'
+
+                        }
+                    },
+                    methods: {
+                        handle(){
+                            console.log(this.email, this.password)
+                        }
+                    }
+                }),
+                app.component('toggler',{
+                    template: `
+                    <p class="text-center text-4xl text-gray-600"> {{ head }}</p>
+                    <div class="my-2">
+                        <button @click="toggle" class="py-2 text-sm w-full rounded-full text-gray-200 bg-blue-600 shadow hover:bg-blue-800 hover:text-gray-100">Toggle Box </button>
+                        </div>
+                        <p v-if="open">Show text2 on Vue js</p>
+                    `,
+                    data(){
+                        return {
+                            open: false,
+                            head: 'My Toggler'
+                        }
+                    },
+                    methods: {
+                        toggle(){
+                            this.open = !this.open
+                        }
+                    }
+                }),
+                app.component('custom-input', {
+                    template: `
+                    <label>
+                    {{ label }}
+                    <input v-model="inputValue" class="py-2 px-4 my-2 border border-gray-300 shadow rounded-lg bg-gray-300 w-full" />
+                    </label>
+                    `,
+                    props: ['label', 'modelValue'],
+                    computed: {
+                        inputValue: {
+                            get(){
+                                return this.modelValue
+                            },
+                            set(value){
+                                this.$emit('update:modelValue', value)
+                            }
+                        }
+
+                    },
+                    data(){
+                        return {
+
+                        }
+                    }
+                })
+                app.mount('#app')
+            </script>
+            
+
+        </div>
+
+    </body>
+
+</html>
